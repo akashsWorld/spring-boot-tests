@@ -9,17 +9,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 public class TestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    
 
     @MockBean
     private TestService testService;
@@ -38,13 +39,28 @@ public class TestControllerTest {
     void getNameWithWishAndAlsoCheckTheContentType() throws Exception {
 
         String name = "Akash";
-        given(testService.getNameWithWish(name)).willReturn("Hello "+ name);
+        given(testService.getNameWithWish(any(String.class))).willReturn("Hello "+ name);
 
         mockMvc.perform(get("/api/v1/test/getNameWithWish/"+name)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
+
+    @Test
+    void getNameWithWishAndAssertTheValueGettingFromController() throws Exception {
+
+        String name = "Akash";
+        given(testService.getNameWithWish(name)).willReturn("Hello "+ name);
+
+        mockMvc.perform(get("/api/v1/test/getNameWithWish/"+name)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$",is("Hello "+name)));
+    }
+
+
 
 
 }
