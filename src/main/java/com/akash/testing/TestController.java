@@ -25,4 +25,15 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(testService.saveString(str));
     }
 
+    @PutMapping("updateName/{id}")
+    public ResponseEntity updateName(@RequestBody String name, @PathVariable Integer id){
+        testService.updateName(name,id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    @DeleteMapping("deleteName/{id}")
+    public ResponseEntity updateName(@PathVariable Integer id){
+        testService.deleteName(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }

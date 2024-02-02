@@ -19,4 +19,12 @@ public class TestService {
     public String getNameWithWish(String name) {
         return "Hello "+name;
     }
+
+    public void updateName(String name, Integer id) {
+        arrayList.set(id,name);
+    }
+
+    public void deleteName(Integer id) {
+        arrayList.remove(id);
+    }
 }
